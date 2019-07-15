@@ -30,7 +30,10 @@
                 padding: 0.8rem 1rem;
                 text-align: left;
                 cursor: pointer;
+                min-width: 140px;
+                min-height: 60px;
                 &.schedule-container{
+                    padding: 0.8rem 1rem;
                     background: #1A73E8;
                     color: #ededed;
                     height: 100%;
@@ -39,13 +42,13 @@
                     left: 0;
                     bottom: 0;
                     right: 0;
-                    max-width: 150px;
-                    overflow: hidden;
+                    border: 1px solid rgba(146, 146, 146, 0.3);
+                    box-sizing: border-box;
                    h3{
                         color: #ededed;
-                        overflow: hidden;
+                        font-size: 1rem;
                         width: 100%;
-                        
+                        margin: 0;
                    }
                 }
             }

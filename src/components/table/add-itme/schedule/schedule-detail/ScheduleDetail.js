@@ -4,9 +4,18 @@ import { Row, Col } from "antd";
 export default class ScheduleDetail extends Component {
     constructor(props) {
         super(props);
+        const {title, location, amountToComplete, desc} = this.props.schedule;
+        console.log(this.props.schedule);
+
         this.state = {
             schedule: this.props.schedule,
-            allowAdjust: false
+            allowAdjust: false,
+            scheduleObj: {
+                title ,
+                location: location || '',
+                desc: desc || '' ,
+                amountToComplete
+            }
         }
     }
 
@@ -18,11 +27,34 @@ export default class ScheduleDetail extends Component {
         })
     }
 
+    deleteSchedule = () => {
+        const {schedule, handleDeleteSchedule, locate} = this.props;
+        const [row, col] = locate;
+        handleDeleteSchedule([row-1, col], schedule.amountToComplete);
+    }
+
+    adjustSchedule = (e) => {
+        e.preventDefault();
+        console.log(this.state.scheduleObj);
+    }
+
+    handleChangeInputForm = (e) => {
+        let key = e.target.name;
+        let val = e.target.value;
+       this.setState((prevState) => {
+           prevState.scheduleObj[key] = val;
+           return {
+               scheduleObj: {...prevState.scheduleObj}
+           }
+       })
+    }
+
     render() {
-        const { schedule, } = this.props;
+        const {locate } = this.props;
         const { allowAdjust } = this.state;
+        const {title, location, desc, amountToComplete} = this.state.scheduleObj;
         return (
-            <form className="form">
+            <form className="form" onSubmit={this.adjustSchedule}>
                 <div className="user-interact-wrapper">
                     <Row gutter={10}>
                         <Col className="gutter-row" span={3}>
@@ -32,7 +64,7 @@ export default class ScheduleDetail extends Component {
                             </span>
                         </Col>
                         <Col className="gutter-row" span={3} >
-                            <span className="interact-btn remove" title="Xóa lịch trình">
+                            <span className="interact-btn remove" title="Xóa lịch trình" onClick={this.deleteSchedule}>
                                 <i className="fas fa-trash-alt"></i>
                             </span>
                         </Col>
@@ -40,11 +72,13 @@ export default class ScheduleDetail extends Component {
                 </div>
                 <div className="form-group">
                     <input type="text" name="title"
-                        class="form-control"
+                        className="form-control"
                         placeholder="Nhập tiêu đề" id="title"
-                        autocomplete="off" required defaultValue={schedule.title}
+                        autoComplete="off" required
+                        value={title}
+                        onChange={this.handleChangeInputForm}
                         disabled={allowAdjust ? "" : "disabled"} />
-                    <label for="title">Tiêu đề</label>
+                    <label htmlFor="title">Tiêu đề</label>
                     <div className="place-border"></div>
                 </div>
 
@@ -52,20 +86,37 @@ export default class ScheduleDetail extends Component {
                     <input type="text"
                         name="location" className="form-control"
                         placeholder="Nhập địa chỉ"
-                        id="location" defaultValue={schedule.location}
+                        id="location"
+                        value={location}
+                        onChange={this.handleChangeInputForm}
                         disabled={allowAdjust ? "" : "disabled"} />
-                    <label for="location">Địa chỉ </label>
-                    <div class="place-border"></div>
+                    <label htmlFor="location">Địa chỉ </label>
+                    <div className="place-border"></div>
+                </div>
+
+                <div className="form-group">
+                    <input type="number"
+                        name="amountToComplete" className="form-control"
+                        placeholder="Nhập địa chỉ"
+                        id="amountToComplete"
+                        value={amountToComplete}
+                        onChange={this.handleChangeInputForm}
+                        min={1}
+                        disabled={allowAdjust ? "" : "disabled"} max={24 - locate[0]}/>
+                    <label htmlFor="amountToComplete">Thời gian hoàn thành: </label>
+                    <div className="place-border"></div>
                 </div>
 
                 <div className="form-group">
                     <textarea placeholder="Nhập nội dung"
-                        defaultValue={schedule.desc} id="desc"
+                         id="desc"
                         name="desc"
+                        onChange={this.handleChangeInputForm}
                         className="form-control"
+                        value={desc}
                         disabled={allowAdjust ? "" : "disabled"} />
-                    <label for="desc">Nội dung </label>
-                    <div class="place-border"></div>
+                    <label htmlFor="desc">Nội dung </label>
+                    <div className="place-border"></div>
                 </div>
 
                 <button

@@ -31,7 +31,8 @@ export default class TableComp extends Component {
             for (let j = 0; j < dataTable[i - 1].length; j++) {
                 cols.push(
                     <AddSchedule key={dataTable[i - 1][j].id}
-                        dataSchedule={dataTable[i - 1][j]} showModal={this.showModal} locate={[i, j]} />
+                        dataSchedule={dataTable[i - 1][j]} showModal={this.showModal} locate={[i, j]} 
+                        handleDeleteSchedule={this.handleDeleteSchedule} handleChangeSchedule={this.handleChangeSchedule}/>
                 )
             }
             dayTimeArr.push(
@@ -104,6 +105,15 @@ export default class TableComp extends Component {
             }
         }
         this.setState({ dataTable: [...cloneData] })
+    }
+
+    handleChangeSchedule = ([row, col], adjustedSchedule) => {
+        this.setState((prevState)=>{
+            prevState.dataTable[row][col].schedule = {...adjustedSchedule};
+            return {
+                dataTable: [...prevState.dataTable]
+            }
+        })
     }
 
     render() {

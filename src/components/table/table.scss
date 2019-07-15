@@ -1,0 +1,59 @@
+.table-wrapper{
+    display: flex;
+    justify-content: center;
+    padding: 5rem 0;
+    .table-schedule{
+        border-radius: 15px;
+        box-shadow: 1px 1px 5px 2px rgba(0,0,0,0.2);
+        thead{
+            tr {
+                th{
+                    background-color: #6D7AE0;
+                    border: 0;
+                    color: #efefef;  
+                    padding: 0.8rem 1rem;
+                    text-align: left;       
+                    &:first-child{
+                        border-top-left-radius: 15px;
+                    } 
+                    &:last-child{
+                        border-top-right-radius: 15px;
+                    }        
+                    &:not(:last-child)  {
+                        border-right: 1px solid #aaa;
+                    }
+                }
+            }
+        }
+        tbody{
+            .col-content{
+                padding: 0.8rem 1rem;
+                text-align: left;
+                cursor: pointer;
+                &.schedule-container{
+                    background: #1A73E8;
+                    color: #ededed;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    max-width: 150px;
+                    overflow: hidden;
+                   h3{
+                        color: #ededed;
+                        overflow: hidden;
+                        width: 100%;
+                        
+                   }
+                }
+            }
+            .col-time{
+                padding: 1rem;
+                border-right: 1px solid rgba(136, 136, 136, 0.5);
+                border-top: 1px solid rgba(136, 136, 136, 0.5);
+            }
+        }
+    }
+}

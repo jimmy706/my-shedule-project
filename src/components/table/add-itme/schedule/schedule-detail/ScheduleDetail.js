@@ -4,16 +4,15 @@ import { Row, Col } from "antd";
 export default class ScheduleDetail extends Component {
     constructor(props) {
         super(props);
-        const {title, location, amountToComplete, desc} = this.props.schedule;
-        console.log(this.props.schedule);
+        const { title, location, amountToComplete, desc } = this.props.schedule;
 
         this.state = {
             schedule: this.props.schedule,
             allowAdjust: false,
             scheduleObj: {
-                title ,
+                title,
                 location: location || '',
-                desc: desc || '' ,
+                desc: desc || '',
                 amountToComplete
             }
         }
@@ -28,9 +27,9 @@ export default class ScheduleDetail extends Component {
     }
 
     deleteSchedule = () => {
-        const {schedule, handleDeleteSchedule, locate} = this.props;
+        const { schedule, handleDeleteSchedule, locate } = this.props;
         const [row, col] = locate;
-        handleDeleteSchedule([row-1, col], schedule.amountToComplete);
+        handleDeleteSchedule([row - 1, col], schedule.amountToComplete);
     }
 
     adjustSchedule = (e) => {
@@ -41,18 +40,18 @@ export default class ScheduleDetail extends Component {
     handleChangeInputForm = (e) => {
         let key = e.target.name;
         let val = e.target.value;
-       this.setState((prevState) => {
-           prevState.scheduleObj[key] = val;
-           return {
-               scheduleObj: {...prevState.scheduleObj}
-           }
-       })
+        this.setState((prevState) => {
+            prevState.scheduleObj[key] = val;
+            return {
+                scheduleObj: { ...prevState.scheduleObj }
+            }
+        })
     }
 
     render() {
-        const {locate } = this.props;
+        const { locate } = this.props;
         const { allowAdjust } = this.state;
-        const {title, location, desc, amountToComplete} = this.state.scheduleObj;
+        const { title, location, desc, amountToComplete } = this.state.scheduleObj;
         return (
             <form className="form" onSubmit={this.adjustSchedule}>
                 <div className="user-interact-wrapper">
@@ -102,14 +101,14 @@ export default class ScheduleDetail extends Component {
                         value={amountToComplete}
                         onChange={this.handleChangeInputForm}
                         min={1}
-                        disabled={allowAdjust ? "" : "disabled"} max={24 - locate[0]}/>
+                        disabled={allowAdjust ? "" : "disabled"} max={24 - locate[0]} />
                     <label htmlFor="amountToComplete">Thời gian hoàn thành: </label>
                     <div className="place-border"></div>
                 </div>
 
                 <div className="form-group">
                     <textarea placeholder="Nhập nội dung"
-                         id="desc"
+                        id="desc"
                         name="desc"
                         onChange={this.handleChangeInputForm}
                         className="form-control"

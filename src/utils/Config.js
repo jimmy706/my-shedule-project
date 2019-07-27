@@ -6,8 +6,12 @@ const data = localStorage.getItem("dataSchedule") ? JSON.parse(localStorage.getI
 
 
 export function canMoveSchedule(row, col) {
-    let canMove = !!data[row][col].schedule ? false : true;
-    console.log(data[row][col]);
+    let canMove;
+    if(!!data[row][col]){
+        canMove = !!data[row][col].schedule ? false : true;
+    }
+    else
+        return false;
     return canMove;
 }
 
@@ -18,9 +22,9 @@ export function setObserver([lastedRow, lastedCol], o) {
 }
 
 export function getObserver() {
-    return observer;
+    return {...observer};
 }
 
 export function getLastedDragLocate() {
-    return lastedDragLocate;
+    return [...lastedDragLocate];
 }

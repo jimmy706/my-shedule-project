@@ -32,7 +32,7 @@ const ModalForm = Form.create({ name: 'form_in_modal' })(
                         <Form.Item label="Tiêu đề">
                             {getFieldDecorator('title', {
                                 rules: [{ required: true, message: 'Vui lòng nhập tiêu đề!' }],
-                            })(<Input autoComplete="off" autoCorrect="off" maxLength={15} />)}
+                            })(<Input autoComplete="off" autoCorrect="off" />)}
                         </Form.Item>
                         <Form.Item label="Nội dung">
                             {getFieldDecorator('desc')(<Input type="textarea" autoComplete="off" autoCorrect="off" />)}

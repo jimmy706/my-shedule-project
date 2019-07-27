@@ -20,7 +20,7 @@ export default function Schedule(props) {
 
     const renderTime = () => {
         const time = moment(schedule.beginTime);
-        const endTime = parseInt(time.format('LT').split(":")[0]) + schedule.amountToComplete + ":00";
+        const endTime = parseInt(time.format('LT').split(":")[0]) + parseInt(schedule.amountToComplete) + ":00";
         return `${time.format("hh:mm")} - ${endTime}`;
     }
     const content = <ScheduleDetail schedule={schedule}

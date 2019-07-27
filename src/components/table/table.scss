@@ -48,7 +48,11 @@
                         color: #ededed;
                         font-size: 1rem;
                         width: 100%;
+                        text-overflow: ellipsis; 
+                        white-space: nowrap; 
+                        overflow: hidden;
                         margin: 0;
+                        display: inline-block;
                    }
                 }
             }

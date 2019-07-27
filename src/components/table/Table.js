@@ -6,6 +6,7 @@ import ModalForm from './modal-form/ModalForm';
 import { DndProvider } from "react-dnd";
 import HTML5Backend from 'react-dnd-html5-backend';
 import { getObserver, getLastedDragLocate } from "../../utils/Config";
+import moment from 'moment';
 
 
 let locateObjet = {
@@ -35,7 +36,7 @@ export default class TableComp extends Component {
             );
             for (let j = 0; j < dataTable[i - 1].length; j++) {
                 cols.push(
-                    <AddSchedule key={dataTable[i - 1][j].id}
+                    <AddSchedule key={(i-1)*7 + j}
                         dataSchedule={dataTable[i - 1][j]} showModal={this.showModal} locate={[i, j]}
                         handleDeleteSchedule={this.handleDeleteSchedule}
                         handleChangeSchedule={this.handleChangeSchedule}
@@ -81,7 +82,6 @@ export default class TableComp extends Component {
             if (err) {
                 return;
             }
-
             const { title, desc, beginTime, amountToComplete, location } = values;
             const cloneValues = { title, desc, beginTime, amountToComplete, location };
             const row = locateObjet.fromTime - 1;
@@ -90,14 +90,14 @@ export default class TableComp extends Component {
             cloneData[row][col].schedule = cloneValues;
             if (amountToComplete > 1) {
                 for (let i = 1; i <= amountToComplete - 1; i++) {
-                    cloneData[row + i].splice(col, 1);
+                    cloneData[row + i].pop();
                 }
             }
-            localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
             this.setState({
                 visible: false,
                 dataTable: [...cloneData]
             }, () => {
+                localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
                 form.resetFields();
             });
         });
@@ -113,37 +113,66 @@ export default class TableComp extends Component {
                 });
             }
         }
-        localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
-        this.setState({ dataTable: [...cloneData] })
+        
+        this.setState({ dataTable: [...cloneData] },()=>{
+            localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
+        })
     }
 
     handleChangeSchedule = ([row, col], adjustedSchedule) => {
-        this.setState((prevState) => {
-            prevState.dataTable[row][col].schedule = { ...adjustedSchedule };
-            return {
-                dataTable: [...prevState.dataTable]
+        const cloneData = [...this.state.dataTable];
+        let {amountToComplete} = cloneData[row][col].schedule; 
+        const adjustedAmoutToComplete = parseInt(adjustedSchedule.amountToComplete);
+        const amountChange = amountToComplete - adjustedAmoutToComplete;
+        if(amountChange < 0){
+            if(typeof amountToComplete === 'string'){
+                amountToComplete = parseInt(amountToComplete);
             }
-        })
+            for(let i = 1; i <= Math.abs(amountChange); i++){
+                cloneData[row + amountToComplete + i - 1].splice(col, 1);
+            }
+        }
+        else if(amountChange > 0){
+            for (let i = 1; i <=  Math.abs(amountChange); i++) {
+                cloneData[row + adjustedAmoutToComplete + i - 1].splice(col, 0, {
+                    id: 7 * i + (col + 1)
+                });
+            }
+        }
+        
+        cloneData[row][col].schedule.title = adjustedSchedule.title;
+        cloneData[row][col].schedule.desc = adjustedSchedule.desc;
+        cloneData[row][col].schedule.amountToComplete = adjustedSchedule.amountToComplete;
+        cloneData[row][col].schedule.locate = adjustedAmoutToComplete.locate;
+        this.setState({dataTable: [...cloneData]},()=>{
+            localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
+        });
     }
 
     handleMoveSchedule = ([targetRow, targetCol]) => {
         const lastedDragObject = getObserver();
+        lastedDragObject.beginTime = moment(lastedDragObject.beginTime).hour(targetRow + 1);
         const { amountToComplete } = lastedDragObject;
         const [lastedRow, lastedCol] = getLastedDragLocate();
         const cloneData = [...this.state.dataTable];
         cloneData[targetRow][targetCol].schedule = lastedDragObject;
         if (amountToComplete > 1) {
+            // TODO: delete space to span row at target drop
             for (let i = 1; i <= amountToComplete - 1; i++) {
-                cloneData[targetRow + i].splice(targetCol, 1);
+                cloneData[targetRow + i].pop();
             }
+
+            // TODO: return space for lasted drag target
+            for (let i = 1; i <= amountToComplete - 1; i++) {
+                cloneData[lastedRow + i].splice(lastedCol, 0, {
+                    id: 7 * i + (lastedCol + 1)
+                });
+            }
+
         }
-
-        this.handleDeleteSchedule([lastedRow, lastedCol], amountToComplete);
-
-        this.setState({ dataTable: [...cloneData] }, () => {
-            localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
-        })
-
+        delete cloneData[lastedRow][lastedCol].schedule;
+        
+        this.setState({ dataTable: [...cloneData] })
     }
 
     render() {

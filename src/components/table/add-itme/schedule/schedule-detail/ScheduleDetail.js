@@ -34,7 +34,11 @@ export default class ScheduleDetail extends Component {
 
     adjustSchedule = (e) => {
         e.preventDefault();
-        console.log(this.state.scheduleObj);
+        const [row, col] = this.props.locate;
+       this.props.handleChangeSchedule([row - 1, col], this.state.scheduleObj);
+       this.setState({
+           allowAdjust: false
+       })
     }
 
     handleChangeInputForm = (e) => {

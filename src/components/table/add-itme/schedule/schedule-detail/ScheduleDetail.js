@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col } from "antd";
+const colors = ["#1A73E8", "#EA1B47", "#EA561B", "#911BEA", "#EAA21B", "#222222", "#5AE023", "#DF2877"]
 
 export default class ScheduleDetail extends Component {
     constructor(props) {
@@ -52,6 +53,12 @@ export default class ScheduleDetail extends Component {
         })
     }
 
+    renderColors = () => {
+        return colors.map(color => (
+            <span className="color-picker" style={{background: color}} 
+            key={color}  onClick={()=>this.props.setBgColor(color)}/>))
+    }
+
     render() {
         const { locate } = this.props;
         const { allowAdjust } = this.state;
@@ -70,6 +77,9 @@ export default class ScheduleDetail extends Component {
                             <span className="interact-btn remove" title="Xóa lịch trình" onClick={this.deleteSchedule}>
                                 <i className="fas fa-trash-alt"></i>
                             </span>
+                        </Col>
+                        <Col className="gutter-row" span={18}>
+                            {this.renderColors()}
                         </Col>
                     </Row>
                 </div>
@@ -92,7 +102,8 @@ export default class ScheduleDetail extends Component {
                         id="location"
                         value={location}
                         onChange={this.handleChangeInputForm}
-                        disabled={allowAdjust ? "" : "disabled"} />
+                        disabled={allowAdjust ? "" : "disabled"} 
+                        autoComplete="off"/>
                     <label htmlFor="location">Địa chỉ </label>
                     <div className="place-border"></div>
                 </div>
@@ -117,7 +128,8 @@ export default class ScheduleDetail extends Component {
                         onChange={this.handleChangeInputForm}
                         className="form-control"
                         value={desc}
-                        disabled={allowAdjust ? "" : "disabled"} />
+                        disabled={allowAdjust ? "" : "disabled"} 
+                        autoComplete="off"/>
                     <label htmlFor="desc">Nội dung </label>
                     <div className="place-border"></div>
                 </div>

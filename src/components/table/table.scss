@@ -34,7 +34,6 @@
                 min-height: 60px;
                 &.schedule-container{
                     padding: 0.8rem 1rem;
-                    background: #1A73E8;
                     color: #ededed;
                     height: 100%;
                     position: absolute;
@@ -44,6 +43,7 @@
                     right: 0;
                     border: 1px solid rgba(146, 146, 146, 0.3);
                     box-sizing: border-box;
+                    transition: background-color 0.3s ease;
                    h3{
                         color: #ededed;
                         font-size: 1rem;

@@ -1,8 +1,11 @@
-import dataTable from "../constants/data";
 
 let observer = null;
 let lastedDragLocate = null;
-const data = localStorage.getItem("dataSchedule") ? JSON.parse(localStorage.getItem("dataSchedule")) : dataTable;
+let data;
+
+export function setData(dataTable){
+    data = [...dataTable];
+}
 
 
 export function canMoveSchedule(row, col) {

@@ -138,3 +138,12 @@
 .form-control:valid ~ .place-border::after{
     background-color: #468df7;
 }
+
+.form .color-picker{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 8px;
+}

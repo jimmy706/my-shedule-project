@@ -5,7 +5,7 @@ import AddSchedule from './add-itme/AddSchedule';
 import ModalForm from './modal-form/ModalForm';
 import { DndProvider } from "react-dnd";
 import HTML5Backend from 'react-dnd-html5-backend';
-import { getObserver, getLastedDragLocate } from "../../utils/Config";
+import { getObserver, getLastedDragLocate, setData } from "../../utils/Config";
 import moment from 'moment';
 
 
@@ -21,6 +21,10 @@ export default class TableComp extends Component {
             dataTable: dataSchedule,
             visible: false
         }
+    }
+
+    componentDidMount(){
+        setData(this.state.dataTable);
     }
 
     renderDayTime = () => {
@@ -97,6 +101,7 @@ export default class TableComp extends Component {
                 visible: false,
                 dataTable: [...cloneData]
             }, () => {
+                setData(this.state.dataTable);
                 localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
                 form.resetFields();
             });
@@ -115,6 +120,7 @@ export default class TableComp extends Component {
         }
         
         this.setState({ dataTable: [...cloneData] },()=>{
+            setData(this.state.dataTable);
             localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
         })
     }
@@ -129,7 +135,7 @@ export default class TableComp extends Component {
                 amountToComplete = parseInt(amountToComplete);
             }
             for(let i = 1; i <= Math.abs(amountChange); i++){
-                cloneData[row + amountToComplete + i - 1].splice(col, 1);
+                cloneData[row + amountToComplete + i - 1].pop();
             }
         }
         else if(amountChange > 0){
@@ -145,6 +151,7 @@ export default class TableComp extends Component {
         cloneData[row][col].schedule.amountToComplete = adjustedSchedule.amountToComplete;
         cloneData[row][col].schedule.locate = adjustedAmoutToComplete.locate;
         this.setState({dataTable: [...cloneData]},()=>{
+            setData(this.state.dataTable);
             localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
         });
     }
@@ -172,7 +179,9 @@ export default class TableComp extends Component {
         }
         delete cloneData[lastedRow][lastedCol].schedule;
         
-        this.setState({ dataTable: [...cloneData] })
+        this.setState({ dataTable: [...cloneData] },()=>{
+            localStorage.setItem("dataSchedule", JSON.stringify(cloneData));
+        })
     }
 
     render() {
